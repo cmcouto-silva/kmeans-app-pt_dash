@@ -48,7 +48,7 @@ As variáveis utilizadas neste modelo são, **necessariamente**, numéricas. Com
 
 As variáveis categóricas podem ser utilizas após a descrição e interpretação das amostras presentes nestes grupos. **Não é recomendado o uso de ponderação arbitrária** para transformar variáveis categóricas em variáveis numéricas. Ao transformar variáveis categóricas em variáveis numéricas sem respaldo da literatura, assume-se que a distância entre as categorias são as mesmas, que por sua vez pode introduzir um viés na análise.
 
-O modelo K-means é essencialmente baseado no cálculo da distância - normalmente a [distância euclidiana]() - entre os pontos da amostra e os centroides, que são os pontos inicialmente aleatórios e representam o centro de cada grupo (cluster). Assim, a quantidade de centroides é igual ao número de grupos (estes representados pela letra "k").
+O modelo K-means é essencialmente baseado no cálculo da distância - normalmente a [distância euclidiana](https://pt.wikipedia.org/wiki/Dist%C3%A2ncia_euclidiana) - entre os pontos da amostra e os centroides, que são os pontos inicialmente aleatórios e representam o centro de cada grupo (cluster). Assim, a quantidade de centroides é igual ao número de grupos (estes representados pela letra "k").
 
 Cabe ressaltar que, uma vez que K-means utiliza a distância como métrica do modelo, é necessário normalizar os dados caso as variáveis estejam em escalas diferentes.
 
@@ -117,13 +117,13 @@ model_seed.fit()
 # Raw figure - seed
 raw_fig_seed = go.Figure(
     data=go.Scatter(x=data_seed[:,0], y=data_seed[:,1], mode='markers', marker=dict(color=labels_seed)),
-    layout=dict(title_text="<b>Pontos coloridos conforme os grupos reais</b>",
+    layout=dict(title_text="<b>Grupos de referência</b>",
         template="simple_white", title_font=dict(size=32), height=510, title_x=0.15, title_font_size=21))
-# raw_fig_seed = raw_fig_seed.update_layout(height=510, title_x=0.15, title_font_size=18)
+raw_fig_seed = raw_fig_seed.update_layout(autosize=True)
 
 # Animation figure - seed
 fig_seed = kmeans.plot(model_seed)
-fig_seed = fig_seed.update_layout(autosize=False, height=500,
+fig_seed = fig_seed.update_layout(autosize=False,
     title_text="<b>Visualizando viés de inicialização dos centroides</b>", title_font=dict(size=24))
 
 # Show bias plots
@@ -217,16 +217,17 @@ app.layout = dbc.Container(
                                     dbc.Col(width=6, children=dcc.Graph(id='raw', figure={})),
                                     dbc.Col(width=6, children=dcc.Graph(id='elbow', figure={}))
                                     ]),
-                                dbc.Row([
-                                    dbc.Col(width=2),
-                                    dbc.Col(
-                                        width=10,
-                                        children=dcc.Graph(
+                                # dbc.Row([
+                                    # dbc.Col(width=2),
+                                    # dbc.Col(
+                                        # width=10,
+                                        dcc.Graph(
                                             id='animated_plot',
-                                            figure={}
-                                            )
-                                    ),
-                                ], style={"textAlign":"center"}),
+                                            figure={},
+                                            className='container', style={'maxWidth': '800px', "textAlign":"center"}
+                                            ),
+                                #     ),
+                                # ], style={"textAlign":"center"}),
                                 html.Br(),
                                 kmeans_trap1,
                                 html.Br(),
@@ -286,7 +287,7 @@ def make_plot(k, std, mode):
     animated_plot = animated_plot.update_layout(
         title_text="""<b>Visualizando as etapas do K-means</b>""",
         title_font=dict(size=24), title_x=0.5,
-        width=900, height=600
+        width=800, height=600
         )
 
 
